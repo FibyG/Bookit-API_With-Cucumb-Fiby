@@ -1,0 +1,67 @@
+package com.bookit.pages;
+
+import com.bookit.utilities.BrowserUtils;
+import com.bookit.utilities.ConfigurationReader;
+import com.bookit.utilities.Driver;
+import com.bookit.utilities.Environment;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import java.lang.module.Configuration;
+
+public class SignInPage {
+	
+	public SignInPage() {
+		PageFactory.initElements(Driver.get(), this);
+	}	
+	
+	@FindBy(name="email")
+	public WebElement emailField;
+
+	@FindBy(name = "password")
+	public WebElement passwordField;
+	
+	@FindBy(xpath = "//button[.='sign in']")
+	public WebElement signInButton;
+
+
+	public void login(String role) {
+		String email = "";
+		String password = "";
+
+		switch (role) {
+			case "teacher":
+                email= Environment.TEACHER_EMAIL;
+				password= Environment.TEACHER_PASSWORD;
+
+               //   email = ConfigurationReader.getProperty("teacher_email");
+               //  password = ConfigurationReader.getProperty("teacher_password");
+				break;
+
+			case "team-member":
+				email = Environment.MEMBER_EMAIL;
+				password = Environment.MEMBER_PASSWORD;
+
+//				email = ConfigurationReader.getProperty("team_member_email");
+//				password = ConfigurationReader.getProperty("team_member_password");
+				break;
+			case "team-leader":
+				email= Environment.LEADER_EMAIL;
+				password=Environment.LEADER_PASSWORD;
+
+//				email = ConfigurationReader.getProperty("team_leader_email");
+//				password = ConfigurationReader.getProperty("team_leader_password");
+				break;
+			default:
+
+				throw new RuntimeException("Invalid Role Entry : >> " + role + " <<");
+		}
+		emailField.sendKeys(email);
+		passwordField.sendKeys(password);
+		BrowserUtils.waitFor(1);
+		signInButton.click();
+
+	}
+	
+}
